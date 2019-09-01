@@ -14,5 +14,9 @@ module.exports = {
   },
   toxiproxy: {
     proxyName: 'ipfs_swarm'
+  },
+  tests: {
+    request_frequency: process.env.TEST_REQUEST_FREQUENCY || 1000,
+    duration: process.env.TEST_DURATION || 10*1000
   }
 }
