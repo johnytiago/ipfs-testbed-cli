@@ -17,6 +17,6 @@ module.exports = {
   },
   tests: {
     request_frequency: process.env.TEST_REQUEST_FREQUENCY || 1000,
-    duration: process.env.TEST_DURATION || 10*1000
+    duration: process.env.TEST_DURATION || 30*1000
   }
 }
