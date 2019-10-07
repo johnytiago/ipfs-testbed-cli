@@ -7,8 +7,8 @@ const config = require('../config').kubernetes
 const kc = new k8s.KubeConfig()
 kc.loadFromDefault()
 
-const k8sApiCore = kc.makeApiClient(k8s.Core_v1Api)
-const k8sApiApps = kc.makeApiClient(k8s.Apps_v1Api)
+const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api)
+const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api)
 
 function handleErrorCode (res) {
   const statusCode = res.response.statusCode

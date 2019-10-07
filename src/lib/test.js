@@ -44,13 +44,11 @@ function fetchIPFSAddresses(mappedNodes, cb) {
     const node = mappedNodes[nodeName]
     const ipfs = ipfsClient(node.hosts.ipfsAPI)
     const id = await ipfs.id()
-    console.log(id)
     mappedNodes[nodeName] = { ...node, address: id.addresses[0] }
   }, (err) => err ? cb(err) : cb(null, mappedNodes) )
 }
 
 function connectNodes(mappedNodes, cb) {
-  console.log(mappedNodes)
   async.eachLimit( 
     Object.keys(mappedNodes), 
     idLimit, 
