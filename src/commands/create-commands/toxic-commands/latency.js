@@ -21,12 +21,20 @@ const cmd = {
       describe: 'inject toxic upstream or downstream',
       type: 'string',
       default: 'downstream'
+    }).option('all', {
+      describe: 'apply rule to toxics in all nodes',
+      type: 'boolean',
+      default: false
     })
   },
-  handler: async ({ nodeId, latency, jitter, stream }) => {
-    const res = await k8sClient.getNodeInfo({ nodeId: nodeId })
-    const node = getRandomElement(res)
-    if (!node) return
+  handler: async ({ nodeId, latency, jitter, stream, all }) => {
+    let nodes = await k8sClient.getNodeInfo({ nodeId: nodeId })
+
+    if( !nodeId && !all  )
+      nodes = [ getRandomElement(nodes) ]
+
+    if (!nodes) return
+
     const payload = {
       type: 'latency',
       stream,
@@ -35,9 +43,12 @@ const cmd = {
         jitter
       }
     }
-    const toxic = await toxiproxyClient.createToxic(node.hosts.toxiproxyAPI, payload)
-    console.log({ name: node.name, id: node.id })
-    console.log(toxic)
+
+    await Promise.all(nodes.map( node => {
+      const toxic = await toxiproxyClient.createToxic(node.hosts.toxiproxyAPI, payload)
+      console.log({ name: node.name, id: node.id })
+      console.log(toxic)
+    }))
   }
 }
 
